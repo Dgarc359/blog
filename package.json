@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "dryrun": "yarn ui:build && yarn workspace ui preview",
     "dev": "yarn workspace ui dev",
     "ui:build": "yarn workspace ui build",
     "postui:build": "mkdir -p cdk/dist/ui && cp -r ui/dist/* cdk/dist/ui",

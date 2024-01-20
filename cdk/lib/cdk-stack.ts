@@ -26,20 +26,11 @@ export class BlogStack extends cdk.Stack {
       bucketName: siteDomain,
       publicReadAccess: false,
       blockPublicAccess: cdk.aws_s3.BlockPublicAccess.BLOCK_ALL,
-
-      /**
-       * The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-       * the new bucket, and it will remain in your account until manually deleted. By setting the policy to
-       * DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
-       */
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
-
-      /**
-       * For sample purposes only, if you create an S3 bucket then populate it, stack destruction fails.  This
-       * setting will enable full cleanup of the demo.
-       */
       autoDeleteObjects: true, // NOT recommended for production code
     });
+
+    siteBucket.grantRead(cloudfrontOAI)
 
     // Grant access to cloudfront
     siteBucket.addToResourcePolicy(new cdk.aws_iam.PolicyStatement({
@@ -67,14 +58,14 @@ export class BlogStack extends cdk.Stack {
         {
           httpStatus: 403,
           responseHttpStatus: 403,
-          responsePagePath: '/error.html',
+          responsePagePath: '/index.html',
           ttl: cdk.Duration.minutes(30),
         }
       ],
       defaultBehavior: {
         origin: new cdk.aws_cloudfront_origins.S3Origin(siteBucket, {originAccessIdentity: cloudfrontOAI}),
         compress: true,
-        allowedMethods: cdk.aws_cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+        allowedMethods: cdk.aws_cloudfront.AllowedMethods.ALLOW_ALL,
         viewerProtocolPolicy: cdk.aws_cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       }
     })

@@ -7,8 +7,9 @@ const blog = defineCollection({
     z.object({
       author: z.string().default(SITE.author),
       pubDatetime: z.date(),
-      modDatetime: z.date().optional().nullable(),
       title: z.string(),
+      description: z.string(),
+      modDatetime: z.date().optional().nullable(),
       featured: z.boolean().optional(),
       draft: z.boolean().optional(),
       tags: z.array(z.string()).default(["others"]),
@@ -18,7 +19,6 @@ const blog = defineCollection({
         })
         .or(z.string())
         .optional(),
-      description: z.string(),
       canonicalURL: z.string().optional(),
     }),
 });
