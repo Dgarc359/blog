@@ -1,0 +1,20 @@
+{
+  "scripts": {
+    "dev": "yarn workspace ui dev",
+    "ui:build": "yarn workspace ui build",
+    "postui:build": "mkdir -p cdk/dist/ui && cp -r ui/dist/* cdk/dist/ui",
+    "predeploy": "yarn ui:build",
+    "deploy": "yarn workspace cdk deploy"
+  },
+  "name": "blog",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": "true",
+  "workspaces": [
+    "ui",
+    "cdk"
+  ],
+  "dependencies": {
+    "sharp": "^0.33.2"
+  }
+}
