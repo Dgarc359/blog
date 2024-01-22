@@ -3,9 +3,9 @@
     "dryrun": "yarn ui:build && yarn workspace ui preview",
     "dev": "yarn workspace ui dev",
     "ui:build": "yarn workspace ui build",
-    "postui:build": "mkdir -p cdk/dist/ui && cp -r ui/dist/* cdk/dist/ui",
+    "postui:build": "mkdir -p infrastructure/dist/ui && cp -r ui/dist/* infrastructure/dist/ui",
     "predeploy": "yarn ui:build",
-    "deploy": "yarn workspace cdk deploy"
+    "deploy": "yarn workspace infrastructure deploy"
   },
   "name": "blog",
   "version": "1.0.0",
@@ -13,7 +13,7 @@
   "private": "true",
   "workspaces": [
     "ui",
-    "cdk"
+    "infrastructure"
   ],
   "dependencies": {
     "sharp": "^0.33.2"

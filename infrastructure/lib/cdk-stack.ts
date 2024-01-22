@@ -48,6 +48,10 @@ export class BlogStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'Certificate', { value: certificate.certificateArn });
     
+    const astroRoutingFunction = new cdk.aws_cloudfront.Function(this,
+      `${props.stage}-${props.stackName}-astro-routing-function`, {
+        code: cdk.aws_cloudfront.FunctionCode.fromFile({ filePath: 'src/routing-for-astro.js'}),
+      })
     // CloudFront distribution
     const distribution = new cdk.aws_cloudfront.Distribution(this, 'SiteDistribution', {
       certificate: certificate,
@@ -58,7 +62,7 @@ export class BlogStack extends cdk.Stack {
         {
           httpStatus: 403,
           responseHttpStatus: 403,
-          responsePagePath: '/index.html',
+          responsePagePath: '/error.html',
           ttl: cdk.Duration.minutes(30),
         }
       ],
@@ -66,8 +70,12 @@ export class BlogStack extends cdk.Stack {
         origin: new cdk.aws_cloudfront_origins.S3Origin(siteBucket, {originAccessIdentity: cloudfrontOAI}),
         compress: true,
         allowedMethods: cdk.aws_cloudfront.AllowedMethods.ALLOW_ALL,
+        functionAssociations: [{
+          function: astroRoutingFunction,
+          eventType: cdk.aws_cloudfront.FunctionEventType.VIEWER_REQUEST,
+        }],
         viewerProtocolPolicy: cdk.aws_cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-      }
+      },
     })
 
     new cdk.CfnOutput(this, 'DistributionId', { value: distribution.distributionId });
