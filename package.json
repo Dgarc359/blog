@@ -10,12 +10,14 @@
   "name": "blog",
   "version": "1.0.0",
   "license": "MIT",
-  "private": "true",
   "workspaces": [
     "ui",
     "infrastructure"
   ],
   "dependencies": {
-    "sharp": "^0.33.2"
+    "sharp": "^0.33.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.2.0"
   }
 }
